@@ -25,7 +25,7 @@ void fb_config_init()
     config_init(&config.lc_config);
 }
 
-void fb_config_file()
+void fb_config_file(char *config_file, char *pid_file)
 {
     config_setting_t *setting;
     const char *log_file_name;
@@ -33,7 +33,10 @@ void fb_config_file()
     const char *log_level_str;
     log_level_et level;
 
-    if (!config_read_file(&config.lc_config, "broker.cfg")) {
+    /* XXX make pid_file configurable in config file? */
+    (void)pid_file;
+
+    if (!config_read_file(&config.lc_config, config_file)) {
         log_error("%s:%d - %s", config_error_file(&config.lc_config),
                 config_error_line(&config.lc_config),
                 config_error_text(&config.lc_config));

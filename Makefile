@@ -52,7 +52,7 @@ test::
 clean:
 	rm -rf $(BUILD_DIR)
 
-$(BUILD_DIR)/$(NAME): libconfig $(OFILES)
+$(BUILD_DIR)/$(NAME): libconfig/lib/.libs/libconfig.a $(OFILES)
 	$(CXX) $(OFILES) $(LDFLAGS) -o $@
 
 .PHONY: libconfig

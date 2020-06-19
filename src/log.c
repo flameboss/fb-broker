@@ -3,7 +3,7 @@
 #include <common.h>
 
 
-log_level_et log_level;
+log_level_et log_level = LOG_INFO;
 int log_time;
 static FILE *fp;
 static __thread char _msg[1024];
@@ -24,16 +24,20 @@ void log_init(const char *file_name, log_level_et level, int log_time_config)
 static void log_format(char *tag, const char* message, va_list args)
 {
     int rv;
+    FILE *my_fp = fp;
+    if (fp == NULL) {
+        my_fp = stdout;
+    }
     rv = vsnprintf(_msg, sizeof(_msg), message, args);
     if (log_time) {
         time_t now;
         char date_str[32];
         time(&now);
         strftime(date_str, sizeof date_str, "%FT%TZ", gmtime(&now));
-        fprintf(fp, "%s [%s] %s\n", date_str, tag, _msg);
+        fprintf(my_fp, "%s [%s] %s\n", date_str, tag, _msg);
     }
     else {
-        fprintf(fp, "[%s] %s\n", tag, _msg);
+        fprintf(my_fp, "[%s] %s\n", tag, _msg);
     }
 }
 

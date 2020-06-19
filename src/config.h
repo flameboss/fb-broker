@@ -36,6 +36,6 @@ extern config_st config;
 
 
 void fb_config_init(void);
-void fb_config_file(void);
+void fb_config_file(char *config_file, char *pid_file);
 
 #endif /* CONFIG_H_ */
