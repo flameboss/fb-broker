@@ -404,7 +404,7 @@ int mqtt_parser_execute(mqtt_parser_t *parser, const unsigned char *buf, unsigne
         case S_SUBSCRIBE_TOPIC_1:
             parser->u.subscribe.u16 |= *buf;
             LOG_DEBUG("sub len %d / %d", parser->u.subscribe.u16, parser->rem_len);
-            if (parser->u.subscribe.u16 + 3 > parser->rem_len) {
+            if (parser->u.subscribe.u16 + 3u > parser->rem_len) {
                 log_error("subcribe length error %d", parser->u.subscribe.u16);
                 return 1;
             }
@@ -479,7 +479,7 @@ int mqtt_parser_execute(mqtt_parser_t *parser, const unsigned char *buf, unsigne
             case S_UNSUBSCRIBE_TOPIC_1:
                 parser->u.subscribe.u16 |= *buf;
                 LOG_DEBUG("sub len %d / %d", parser->u.subscribe.u16, parser->rem_len);
-                if (parser->u.subscribe.u16 + 3 > parser->rem_len) {
+                if (parser->u.subscribe.u16 + 3u > parser->rem_len) {
                     log_error("unsub length error %d", parser->u.subscribe.u16);
                     return 1;
                 }
@@ -564,7 +564,7 @@ int mqtt_parser_execute(mqtt_parser_t *parser, const unsigned char *buf, unsigne
                 mp = message_create(p, parser->u.publish.topic_len, parser->u.publish.payload_len,
                                     parser->header.dup, parser->header.qos, parser->header.retain, 0);
                 if (mp == NULL) {
-                    log_error("publish msg malloc %d", j);
+                    log_error("publish msg malloc");
                     return 1;
                 }
                 memcpy(mp->topic, parser->u.publish.topic, parser->u.publish.topic_len);

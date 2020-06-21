@@ -66,7 +66,7 @@ int auth_auth(void *authp, client_st *p, const unsigned char *password)
     rv = 1;
 
     if (p->username[0] == '\0' || p->username[1] != '-' || p->username[2] == '\0'
-            || password == '\0') {
+            || *password == '\0') {
         log_warn("auth failed: %s (invalid)", p->username);
         goto nocleanup;
     }

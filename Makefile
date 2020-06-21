@@ -1,4 +1,3 @@
-
 NAME = fb-broker
 AUTH = auth/auth_fb.c
 DEBUG = YES
@@ -11,9 +10,13 @@ UNAME = $(shell uname)
 ifeq ($(UNAME), Darwin)
 OS_DEPS = /usr/local/bin/autoreconf
 OS_DEF = -DHAVE_KQUEUE=1
+MYSQL_INC =
+PTHREAD_LD =
 else
-OS_DEPS =
-OS_DEV = -DHAVE_EPOLL=1
+OS_DEPS =/usr/bin/autoreconf
+OS_DEF = -DHAVE_EPOLL=1
+MYSQL_INC = -I /usr/include/mysql
+PTHREAD_LD = -lpthread
 endif
 
 BUILD_DIR = $(UNAME)
@@ -25,7 +28,7 @@ OPENSSL_INC = -I $(OPENSSL_INC_DIR)
 OPENSSL_LD = -L$(OPENSSL_DIR)/lib -lssl -lcrypto
 
 CFLAGS = $(INC) $(DEF) -Wextra -Werror
-INC = -I . -I src -I libconfig/lib -I /usr/local/mysql/include $(OPENSSL_INC)
+INC = -I . -I src -I libconfig/lib -I /usr/local/mysql/include $(OPENSSL_INC) $(MYSQL_INC)
 DEF = $(OS_DEF)
 
 ifeq ($(DEBUG), YES)
@@ -35,13 +38,28 @@ else
 DEF += -DCONFIG_ASSERTIONS=0
 endif
 
-LDFLAGS = libconfig/lib/.libs/libconfig.a -L/usr/local/mysql/lib -lmysqlclient $(OPENSSL_LD)
+LDFLAGS = libconfig/lib/.libs/libconfig.a -L/usr/local/mysql/lib -lmysqlclient $(OPENSSL_LD) $(PTHREAD_LD)
+
+ifeq ($(USER), root)
+SUDO =
+else
+SUDO = sudo
+endif
 
 
 all:	$(OS_DEPS) $(BUILD_DIR)/$(NAME)
 
+info:
+	@echo SUDO $(SUDO)
+
 /usr/local/bin/autoreconf:
 	brew install automake
+
+/usr/bin/autoreconf:
+	$(SUDO) apt-get install -y automake
+
+/usr/bin/makeinfo:
+	$(SUDO) apt-get install -y texinfo
 
 run:
 	$(BUILD_DIR)/$(NAME)
@@ -52,7 +70,7 @@ test::
 clean:
 	rm -rf $(BUILD_DIR)
 
-$(BUILD_DIR)/$(NAME): libconfig/lib/.libs/libconfig.a $(OFILES)
+$(BUILD_DIR)/$(NAME): libconfig $(OFILES)
 	$(CXX) $(OFILES) $(LDFLAGS) -o $@
 
 .PHONY: libconfig

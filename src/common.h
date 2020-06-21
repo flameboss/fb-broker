@@ -25,7 +25,12 @@
 #include <netdb.h>
 #include <time.h>
 #include <stdlib.h>
+#ifdef HAVE_KQUEUE
 #include <sys/event.h>
+#endif
+#ifdef HAVE_KQUEUE
+#include <sys/epoll.h>
+#endif
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>

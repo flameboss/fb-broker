@@ -12,7 +12,12 @@
 #include <pthread.h>
 #include <sys/select.h>
 #include <netinet/in.h>
+#ifdef HAVE_KEVENT
 #include <sys/event.h>
+#endif
+#ifdef HAVE_EPOLL
+#include <sys/epoll.h>
+#endif
 #include <stdint.h>
 #include "subscription.h"
 
@@ -55,14 +60,17 @@ struct worker {
     fd_set          _fd_set;
 #endif
 
+#define W_MAX_EVENTS 4096
+
 #if HAVE_KQUEUE
-    enum {
-        MAX_EVENTS = 4096
-    };
     int kqfd;
-    struct kevent karray[MAX_EVENTS];
+    struct kevent karray[W_MAX_EVENTS];
 #endif
 
+#if HAVE_EPOLL
+    int epoll_fd;
+    struct epoll_event events[W_MAX_EVENTS];
+#endif
 };
 
 typedef struct worker worker_st;

@@ -28,7 +28,8 @@ static void usage()
 static void write_pid(char *pid_file)
 {
     size_t len;
-    size_t rv;
+    size_t urv;
+    int rv;
     int fd;
     char s[32];
     fd = open(pid_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
@@ -41,9 +42,9 @@ static void write_pid(char *pid_file)
         log_error("snprintf buffer overflow");
         return;
     }
-    rv = write(fd, s, len);
-    if (rv != len) {
-        log_error("write_pid write failed rv %d, len %d", rv, len);
+    urv = write(fd, s, len);
+    if (urv != len) {
+        log_error("write_pid write failed urv %d, len %d", urv, len);
         return;
     }
     rv = close(fd);

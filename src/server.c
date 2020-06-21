@@ -48,7 +48,6 @@ static int open_server_socket(server_st *sp)
 {
     int rv;
     int sd;
-    struct kevent event;
 
     sd = socket(AF_INET, SOCK_STREAM, 0);
     assert(sd >= 0);

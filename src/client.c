@@ -163,7 +163,7 @@ static int on_recv_subscribe(mqtt_parser_t *parser, subscribe_st *sub)
         int j;
         for (j = 0; j < p->num_subs; ++j) {
             if (strcmp((char *)p->subscriptions[j].filter, (char *)sub->filters[i]) == 0) {
-                granted_qos[i] = MIN(sub->qos[i], 1);
+                granted_qos[i] = MIN(sub->qos[i], 1u);
                 p->subscriptions[i].qos = granted_qos[i];
                 break;
             }
@@ -175,7 +175,7 @@ static int on_recv_subscribe(mqtt_parser_t *parser, subscribe_st *sub)
         p->subscriptions[p->num_subs].client = p;
 
         /* TODO: support qos 2 */
-        granted_qos[i] = MIN(sub->qos[i], 1);
+        granted_qos[i] = MIN(sub->qos[i], 1u);
         p->subscriptions[p->num_subs].qos = granted_qos[i];
         sub_insert(&p->worker->subs, &p->subscriptions[p->num_subs]);
         ++p->num_subs;
