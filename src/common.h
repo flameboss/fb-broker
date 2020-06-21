@@ -28,7 +28,7 @@
 #ifdef HAVE_KQUEUE
 #include <sys/event.h>
 #endif
-#ifdef HAVE_KQUEUE
+#ifdef HAVE_EPOLL
 #include <sys/epoll.h>
 #endif
 #include <sys/time.h>

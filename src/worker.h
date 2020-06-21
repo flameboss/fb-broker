@@ -12,7 +12,7 @@
 #include <pthread.h>
 #include <sys/select.h>
 #include <netinet/in.h>
-#ifdef HAVE_KEVENT
+#ifdef HAVE_KQUEUE
 #include <sys/event.h>
 #endif
 #ifdef HAVE_EPOLL

@@ -47,7 +47,7 @@ void w_poll(worker_st *p)
     timeout.tv_sec = 1;
     timeout.tv_nsec = 0;
 
-    rv = kevent(p->kqfd, NULL, 0, p->karray, MAX_EVENTS, &timeout);
+    rv = kevent(p->kqfd, NULL, 0, p->karray, W_MAX_EVENTS, &timeout);
     if (rv < 0) {
         perror("w_poll kevent");
         sleep(1);
